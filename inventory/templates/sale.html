@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Ventas{% endblock %}
+{% block content %}
+<h1 class="text-center">Nueva Venta</h1>
+<br>
+<div class="container">
+    <form action="{% url 'process_sale' %}" method="POST" class="form-group">
+        {% csrf_token %}
+        <label for="product_id">Producto:</label>
+        <select name="product_id" class="form-control">
+            <option value="">---- Seleccione un producto ----</option>
+            {% for product in products %}
+                <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="detail">Detalle de la Venta:</label>
+        <input type="text" name="detail" class="form-control" required>
+        <label for="quanty">Cantidad:</label>
+        <input type="number" name="quanty" class="form-control" required>
+        <br>
+        <button type="submit" class="btn btn-success col-12">Procesar Venta</button>
+    </form>
+</div>
+<br>
+<div class="container">
+    <table class="table table-bordered text-center">
+        <thead class="bg-dark text-white">
+            <tr>
+                <td>Detalle</td>
+                <td>Producto</td>
+                <td>Cantidad</td>
+                <td>Total</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.detail }}</td>
+                    <td>{{ sale.product }}</td>
+                    <td>{{ sale.quanty }}</td>
+                    <td>{{ sale.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

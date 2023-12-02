@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Categorias{% endblock %}
+{% block content %}
+<h1 class="text-center">Categorias</h1>
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#createModal">Crear Categoria</button>
+        <table class="table table-bordered text-center">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <td>Nombre</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in object_list %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#updateModal{{ category.id }}">Editar</button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ category.id }}">Eliminar</button>
+                        </td>
+                    </tr>
+                    <!-- UpdateModal -->
+                    <div class="modal fade" id="updateModal{{ category.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar Categoria</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'update_category' category.id %}" method="POST" class="form-group">
+                                        {% csrf_token %}
+                                        <label for="name">Nombre:</label>
+                                        <input type="text" name="name" class="form-control" value="{{ category.name }}" required> 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-success">Actualizar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DeleteModal -->
+                    <div class="modal fade" id="deleteModal{{ category.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Categoria</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>Se eliminara la categoria: <strong>{{ category }}</strong></h4>
+                                    <p class="text-danger">¡Esta accion no se puede revertir!</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <a href="{% url 'delete_category' category.id %}" class="btn btn-danger">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- CreateModal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Categoria</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'create_category' %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <label for="name">Nombre:</label>
+                        <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}

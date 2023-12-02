@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Detalle del Producto{% endblock %}
+{% block content %}
+    <h1 class="text-center m-3">{{ product.name }}</h1>
+    <table class="table table-bordered text-center">
+        <thead class="bg-info text-white">
+            <tr>
+                <td>ID</td>
+                <td>Nombre</td>
+                <td>Existencias</td>
+                <td>Precio</td>
+                <td>Categoria</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    {% if product.category != None %}
+                                {{ product.category }}
+                            {% else %}
+                                SIN CATEGORIA
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h3 class="text-center">Etiquetas del Producto</h3>
+    <button class="btn btn-info mb-3" data-toggle="modal" data-target="#addTagModal">Agregar Etiqueta</button>
+    <table class="table table-bordered text-center">
+        <thead class="bg-info text-white">
+            <tr>
+                <td>ID</td>
+                <td>Nombre</td>
+                <td>Acciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag in product_tags %}
+                <tr>
+                    <td>{{ tag.id }}</td>
+                    <td>{{ tag.name }}</td>
+                    <td>
+                        <button class="btn btn-warning" data-toggle="modal" data-target="#removeTagModal{{ tag.id }}">Quitar Etiqueta</button>
+                    </td>
+                </tr>
+                <!-- removeTagModal -->
+                <div class="modal fade" id="removeTagModal{{ tag.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title" id="exampleModalLabel">Quitar Etiqueta</h5>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Se quitara la etiqueta: <strong>{{ tag.name }}</strong></h4>
+                                <p class="text-warning">¡Esta accion no se puede revertir!</p>
+                                <form action="{% url 'remove_tag' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="tag_id" value="{{ tag.id }}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-warning">Quitar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- addTagModal -->
+    <div class="modal fade" id="addTagModal{{ tag.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Etiquetas del producto</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'add_tag' product.id %}" class="form-group" method="POST">
+                        {% csrf_token %}
+                        <label for="tag_id">Etiqueta</label>
+                        <select name="tag_id" class="form-control" required>
+                            <option value="">---- Seleccione una Etiqueta</option>
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-info">Agregar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    
+    

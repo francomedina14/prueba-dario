@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<h1 class="text-center">Productos</h1>
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#createModal">Crear Producto</button>
+        <table class="table table-bordered text-center">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <td>Nombre</td>
+                    <td>Existencias</td>
+                    <td>Categoria</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>
+                            {% if product.category != None %}
+                                {{ product.category }}
+                            {% else %}
+                                SIN CATEGORIA
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#updateModal{{ product.id }}">Editar</button>
+                            <a href="{% url 'detail_product' product.id %}" class="btn btn-info">Detalle</a>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ product.id }}">Eliminar</button>
+                        </td>
+                    </tr>
+                    <!-- UpdateModal -->
+                    <div class="modal fade" id="updateModal{{ product.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'update_product' product.id %}" method="POST" class="form-group">
+                                        {% csrf_token %}
+                                        <label for="name">Nombre:</label>
+                                        <input type="text" name="name" class="form-control" value="{{ product.name }}" required> 
+                                        <label for="stock">Existencias:</label>
+                                        <input type="number" name="stock" class="form-control" value="{{ product.stock }}" required>
+                                        <label for="price">Precio:</label>
+                                        <input type="number" name="price" class="form-control" value="{{ product.price }}" required>
+                                        <label for="category_id">Categoria:</label>
+                                        <select name="category_id" class="form-control" required>
+                                            <option value="{{ product.category.id }}">{{ product.category }}</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-success">Actualizar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DeleteModal -->
+                    <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Producto</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>Se eliminara el producto: <strong>{{ product }}</strong></h4>
+                                    <p class="text-danger">¡Esta accion no se puede revertir!</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- CreateModal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Producto</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'create_product' %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <label for="name">Nombre:</label>
+                        <input type="text" name="name" class="form-control" required>
+                        <label for="stock">Existencias:</label>
+                        <input type="number" name="stock" class="form-control" required>
+                        <label for="price">Precio:</label>
+                        <input type="number" name="price" class="form-control" required>
+                        <label for="category_id">Categoria:</label>
+                        <select name="category_id" class="form-control" required>
+                            <option value="">---- Seleccione una opcion ----</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}

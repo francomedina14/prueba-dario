@@ -1,0 +1,22 @@
+PROYECTO CRUD:
+1) Al menos 1 relacion en el crud
+2) Minimo 2 campos mas aparte del punto 1)
+3) No es necesario la aplicacion de estilos
+4) Se deben respetar las buenas practicas
+5) El crud debe tener todas las operaciones: CREAR, LEER, ACTUALIZAR Y ELIMINAR
+
+GRILLA DE EVALUCION:
+-Armado del crud: 7 puntos
+-Buenas practicas: 2 puntos
+-Creatividad: 1 punto
+
+FECHA DE ENTREGA:
+-No hay
+
+MODALIDAD DE ENTREGA:
+-Me avisan por mensaje que ya tienen el proyecto
+-Coordinamos un Zoom para revisarlo
+
+CERTIFICACION: 
+-Se obtiene si el proyecto esta aprobado
+-Aprobacion: 7 puntos o mas
